@@ -1,7 +1,8 @@
 import { lazy } from "react"
 import { useRoutes } from "react-router-dom"
 import Product from "../features/product/Product"
-import User from "../features/user/user"
+import Users from "../features/users/Users"
+
 
 const DashboardLayout = lazy(() => import("../layout/DashboardLayout"))
 const Auth = lazy(() => import("../features/auth/pages/Auth"))
@@ -16,7 +17,8 @@ const AppRoutes = () => {
       children: [
         { index: true, element: <Auth /> },
         { path: "product", element: <Product /> },
-        { path: "user", element: <User/> },
+        { path: "user", element: <Users/> },
+
       ],
     },
     { path: "/login", element: <Login /> },

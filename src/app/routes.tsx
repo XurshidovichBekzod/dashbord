@@ -2,6 +2,7 @@ import { lazy } from "react"
 import { useRoutes } from "react-router-dom"
 import Product from "../features/product/Product"
 import Users from "../features/users/Users"
+import Statistics from "../features/statistics/Statistics"
 
 
 const DashboardLayout = lazy(() => import("../layout/DashboardLayout"))
@@ -25,6 +26,10 @@ const AppRoutes = () => {
               {
                 path: 'user',
                 element: <Users />
+              },
+              {
+                path: 'statistics',
+                element: <Statistics/>
               },
             ]
           }

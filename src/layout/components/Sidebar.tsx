@@ -19,6 +19,11 @@ const Sidebar = () => {
             User
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/statistics" className="sidebar-link">
+            Statistics
+          </NavLink>
+        </li>
       </ul>
     </div>
   )

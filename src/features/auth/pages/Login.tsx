@@ -5,6 +5,7 @@ import { useAuth } from "../service/useAuth";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";   // ✅ qo‘shildi
 
 type FieldType = {
   email: string;
@@ -13,19 +14,21 @@ type FieldType = {
 
 const Login = () => {
   const { signIn } = useAuth();
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     signIn.mutate(values, {
       onSuccess: (res) => {
-        dispatch(setToken(res.data))
-        navigate("/")
-      }
-    })
+        dispatch(setToken(res.data));
+        navigate("/");
+      },
+    });
   };
 
-  const message = signIn.error?.response?.data?.message 
+  // ✅ Xato tuzatildi
+  const axiosError = signIn.error as AxiosError<{ message: string | string[] }>;
+  const message = axiosError?.response?.data?.message;
 
   const errorMessage =
     typeof message === "string"
@@ -57,11 +60,13 @@ const Login = () => {
           >
             <Input.Password />
           </Form.Item>
+
           {signIn.isError && (
             <div className="mb-6">
               <Alert message={errorMessage} type="error" />
             </div>
           )}
+
           <Form.Item label={null}>
             <Button loading={signIn.isPending} type="primary" htmlType="submit">
               Submit

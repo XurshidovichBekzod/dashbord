@@ -1,5 +1,3 @@
-import React from 'react'
-
 import photo from "../../layout/assets/photos.svg"
 
 const Product = () => {

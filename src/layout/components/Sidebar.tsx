@@ -1,23 +1,27 @@
-import { memo } from 'react';
+import { memo } from 'react'
 import dashbord from "../assets/dashbord.svg"
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
-    <div className="w-[320px] h-screen bg-[#fff] p-[20px]">
-      <div>
-        <img src={dashbord} alt="" />
+    <div className="sidebar">
+      <div className="sidebar-logo">
+        <img src={dashbord} alt="Dashboard Logo" />
       </div>
-      <ul className='mt-[20px]'>
+      <ul className="sidebar-menu">
         <li>
-          <NavLink to={"/product"}>Product</NavLink>
+          <NavLink to="/product" className="sidebar-link">
+            Product
+          </NavLink>
         </li>
         <li>
-          <NavLink to={"/user"}>User</NavLink>
+          <NavLink to="/user" className="sidebar-link">
+            User
+          </NavLink>
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default memo(Sidebar);
+export default memo(Sidebar)

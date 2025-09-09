@@ -1,1 +1,46 @@
 @import "tailwindcss";
+
+.sidebar {
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  padding: 20px;
+
+}
+
+.sidebar-logo img {
+  display: block;
+  margin: 0 auto;
+    transition: 1s;
+}
+
+.sidebar-menu {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+    transition: 1s;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  transition: 1s;
+}
+
+.sidebar-link:hover {
+  background: #f3f4f6;
+    transition: 1s;
+}
+
+.sidebar-link.active {
+  background: #5932EA;
+  color: #fff;
+  font-weight: 500;
+    transition: 1s;
+}

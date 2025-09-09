@@ -10,20 +10,29 @@ const Register = lazy(() => import("../features/auth/pages/Register"))
 const Login = lazy(() => import("../features/auth/pages/Login"))
 
 const AppRoutes = () => {
-  return useRoutes([
-    {
-      path: "/",
-      element: <DashboardLayout />,
-      children: [
-        { index: true, element: <Auth /> },
-        { path: "product", element: <Product /> },
-        { path: "user", element: <Users/> },
+  return (
+    useRoutes([
+      {
+        path: "/", element: <Auth />, children: [
+          {
+            path: '/',
+            element: <DashboardLayout />,
+            children: [
+              {
+                index: true,
+                element: <Product/>
+              },
+              {
+                path: 'user',
+                element: <Users />
+              },
+            ]
+          }
+        ]
+      },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> }
+    ])
+  )}
 
-      ],
-    },
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
-  ])
-}
-
-export default AppRoutes
+  export default AppRoutes

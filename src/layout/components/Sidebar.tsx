@@ -10,7 +10,7 @@ const Sidebar = () => {
       </div>
       <ul className="sidebar-menu">
         <li>
-          <NavLink to="/product" className="sidebar-link">
+          <NavLink to="/" className="sidebar-link">
             Product
           </NavLink>
         </li>

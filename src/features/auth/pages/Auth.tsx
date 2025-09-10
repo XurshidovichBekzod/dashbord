@@ -6,7 +6,7 @@ import type { RootState } from "../../../app/store";
 const Auth = () => {
    const token = useSelector((state:RootState) => state.auth.token);
    return token ? <Outlet /> : <Navigate replace to={"/login"} />;
-
 };
 
 export default memo(Auth);
+

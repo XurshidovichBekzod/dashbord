@@ -9,6 +9,7 @@ const DashboardLayout = lazy(() => import("../layout/DashboardLayout"))
 const Auth = lazy(() => import("../features/auth/pages/Auth"))
 const Register = lazy(() => import("../features/auth/pages/Register"))
 const Login = lazy(() => import("../features/auth/pages/Login"))
+const Otp = lazy(()=> import("../features/auth/pages/Otp"))
 
 const AppRoutes = () => {
   return (
@@ -36,7 +37,9 @@ const AppRoutes = () => {
         ]
       },
       { path: "/login", element: <Login /> },
-      { path: "/register", element: <Register /> }
+      { path: "/register", element: <Register /> },
+      { path: "/otp", element: <Otp /> }
+
     ])
   )}
 

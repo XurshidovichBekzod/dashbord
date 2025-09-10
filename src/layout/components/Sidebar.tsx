@@ -11,7 +11,7 @@ const Sidebar = () => {
       <ul className="sidebar-menu">
         <li>
           <NavLink to="/" className="sidebar-link">
-            Product
+            Statistics
           </NavLink>
         </li>
         <li>
@@ -20,8 +20,8 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/statistics" className="sidebar-link">
-            Statistics
+          <NavLink to="/product" className="sidebar-link">
+            Product
           </NavLink>
         </li>
       </ul>

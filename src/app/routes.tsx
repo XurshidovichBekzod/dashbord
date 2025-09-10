@@ -3,13 +3,14 @@ import { useRoutes } from "react-router-dom"
 import Product from "../features/product/Product"
 import Users from "../features/users/Users"
 import Statistics from "../features/statistics/Statistics"
+import Categories from "../features/product/child/Categories"
 
 
 const DashboardLayout = lazy(() => import("../layout/DashboardLayout"))
 const Auth = lazy(() => import("../features/auth/pages/Auth"))
 const Register = lazy(() => import("../features/auth/pages/Register"))
 const Login = lazy(() => import("../features/auth/pages/Login"))
-const Otp = lazy(()=> import("../features/auth/pages/Otp"))
+const Otp = lazy(() => import("../features/auth/pages/Otp"))
 
 const AppRoutes = () => {
   return (
@@ -22,15 +23,21 @@ const AppRoutes = () => {
             children: [
               {
                 index: true,
-                element: <Product/>
+                element: <Statistics />
               },
               {
                 path: 'user',
                 element: <Users />
               },
               {
-                path: 'statistics',
-                element: <Statistics/>
+                path: 'product',
+                element: <Product />,
+                children: [
+                  {
+                    path: "categories",
+                    element: <Categories/>
+                  }
+                ]
               },
             ]
           }
@@ -41,6 +48,7 @@ const AppRoutes = () => {
       { path: "/otp", element: <Otp /> }
 
     ])
-  )}
+  )
+}
 
-  export default AppRoutes
+export default AppRoutes

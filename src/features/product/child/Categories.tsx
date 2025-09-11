@@ -56,19 +56,19 @@ const Categories = () => {
             title: "Action",
             key: "action",
             width: 200,
-            render: (_: any, record: any) => (
+            render: (_: any, categories: any) => (
                 <Space>
                     <Button
                         type="primary"
                         ghost
-                        onClick={() => handleEdit(record)}
+                        onClick={() => handleEdit(categories)}
                     >
                         Edit
                     </Button>
 
                     <Button
                         danger
-                        onClick={() => handleDelete(record.id)}
+                        onClick={() => handleDelete(categories.id)}
                     >
                         Delete
                     </Button>

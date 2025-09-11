@@ -50,7 +50,7 @@ const Categories = () => {
         {
             title: "Category",
             dataIndex: "name",
-            render: (text: string) => <span className="font-semibold">{text}</span>,
+            render: (text: string) => <span>{text}</span>,
         },
         {
             title: "Action",
@@ -94,7 +94,7 @@ const Categories = () => {
                 rowKey="id"
                 loading={isLoading}
                 className="rounded-lg overflow-hidden"
-                pagination={false}
+                pagination={{pageSize: 5}}
             />
 
 

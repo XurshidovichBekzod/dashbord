@@ -1,6 +1,6 @@
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
-import Categories from "./child/Categories"; // 🟢 alohida chaqiramiz
+import Categories from "./child/Categories";
 
 const Product = () => {
   const onChange = (key: string) => {
@@ -59,14 +59,14 @@ const Product = () => {
 
   const items: TabsProps["items"] = [
     {
-      key: "2",
+      key: "1",
       label: "Products",
       children: productTable,
     },
     {
-      key: "1",
+      key: "2",
       label: "Categories",
-      children: <Categories />, // 🟢 endi alohida component ishlayapti
+      children: <Categories />,
     },
   ];
 

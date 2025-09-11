@@ -1,10 +1,9 @@
 import { memo, useState } from "react";
-import { Button, Form, Input, Modal, Popconfirm, Space, Table} from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Space, Table } from "antd";
 import { useCategory } from "../store/useCategory";
 
 const Categories = () => {
-    const { getCategorys, createCategory, updateCategory, deleteCategory } = useCategory();
+    const { getCategorys, createCategory, editCategory, deleteCategory } = useCategory();
     const { data, isLoading } = getCategorys();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editing, setEditing] = useState<any>(null);
@@ -25,7 +24,7 @@ const Categories = () => {
     const handleSubmit = () => {
         form.validateFields().then((values) => {
             if (editing) {
-                updateCategory.mutate(
+                editCategory.mutate(
                     { id: editing.id, ...values },
                     {
                         onSuccess: () => {
@@ -49,13 +48,7 @@ const Categories = () => {
 
     const columns = [
         {
-            title: "ID",
-            dataIndex: "id",
-            width: 80,
-            align: "center" as const,
-        },
-        {
-            title: "Category Name",
+            title: "Category",
             dataIndex: "name",
             render: (text: string) => <span className="font-semibold">{text}</span>,
         },
@@ -66,66 +59,65 @@ const Categories = () => {
             render: (_: any, record: any) => (
                 <Space>
                     <Button
-                        icon={<EditOutlined />}
                         type="primary"
                         ghost
                         onClick={() => handleEdit(record)}
                     >
                         Edit
                     </Button>
-                    <Popconfirm
-                        title="Are you sure delete this category?"
-                        okText="Yes"
-                        cancelText="No"
-                        onConfirm={() => handleDelete(record.id)}
+
+                    <Button
+                        danger
+                        onClick={() => handleDelete(record.id)}
                     >
-                        <Button danger icon={<DeleteOutlined />}>
-                            Delete
-                        </Button>
-                    </Popconfirm>
+                        Delete
+                    </Button>
                 </Space>
             ),
         },
     ];
 
     return (
-        <div className="p-3 bg-white rounded-xl shadow-md">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Category Management</h2>
-                <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
-                    Add Category
+        <>
+        <div className="flex justify-between items-center mb-4 p-[5px]">
+                <h2 className="text-xl font-bold">Category</h2>
+                <Button type="primary" onClick={handleCreate}>
+                    Add
                 </Button>
             </div>
+        <div className="p-3 bg-white rounded-xl shadow-md">
+            
 
             <Table
                 columns={columns}
                 dataSource={data?.data || []}
                 rowKey="id"
                 loading={isLoading}
-                pagination={{ pageSize: 5 }}
-                bordered
                 className="rounded-lg overflow-hidden"
+                pagination={false}
             />
 
-            <Modal
-                title={editing ? "Edit Category" : "Add Category"}
+
+            <Modal className="mt-[100px]"
+                title={editing ? "Category Edit" : "Category Add"}
                 open={isModalOpen}
                 onCancel={() => setIsModalOpen(false)}
                 onOk={handleSubmit}
                 okText="Save"
                 cancelText="Cancel"
+                style={{ marginTop: 170 }}  
             >
-                <Form form={form} layout="vertical">
+                <Form  form={form} layout="vertical">
                     <Form.Item
-                        label="Category Name"
+                        label="You Categories Name"
                         name="name"
-                        rules={[{ required: true, message: "Please input category name!" }]}
                     >
-                        <Input placeholder="Enter category name" />
+                        <Input placeholder="Enter you category name" />
                     </Form.Item>
                 </Form>
             </Modal>
         </div>
+        </>
     );
 };
 

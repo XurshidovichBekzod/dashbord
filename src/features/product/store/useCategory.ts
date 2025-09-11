@@ -17,7 +17,7 @@ export const useCategory = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: [categoryKey] })
     })
 
-    const updateCategory = useMutation<any, any, { id: string; name: string }>({
+    const editCategory = useMutation<any, any, { id: string; name: string }>({
         mutationFn: ({id, ...body}) => api.patch(`category/${id}`, body).then((res) => res.data),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: [categoryKey] })
     });
@@ -27,5 +27,5 @@ export const useCategory = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: [categoryKey] })
     });
 
-    return { createCategory, getCategorys, updateCategory, deleteCategory }
+    return { createCategory, getCategorys, editCategory, deleteCategory }
 }

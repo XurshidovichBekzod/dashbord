@@ -50,25 +50,25 @@ const Categories = () => {
         {
             title: "Category",
             dataIndex: "name",
-            render: (text: string) => <span>{text}</span>,
+            render: (text: string) => <span className="font-semibold">{text}</span>,
         },
         {
             title: "Action",
             key: "action",
             width: 200,
-            render: (_: any, categories: any) => (
+            render: (_: any, record: any) => (
                 <Space>
                     <Button
                         type="primary"
                         ghost
-                        onClick={() => handleEdit(categories)}
+                        onClick={() => handleEdit(record)}
                     >
                         Edit
                     </Button>
 
                     <Button
                         danger
-                        onClick={() => handleDelete(categories.id)}
+                        onClick={() => handleDelete(record.id)}
                     >
                         Delete
                     </Button>
@@ -94,7 +94,7 @@ const Categories = () => {
                 rowKey="id"
                 loading={isLoading}
                 className="rounded-lg overflow-hidden"
-                pagination={{pageSize: 5}}
+                pagination={false}
             />
 
 

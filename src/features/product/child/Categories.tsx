@@ -94,7 +94,7 @@ const Categories = () => {
                 rowKey="id"
                 loading={isLoading}
                 className="rounded-lg overflow-hidden"
-                pagination={false}
+                pagination={{pageSize: 6}}
             />
 
 

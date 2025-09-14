@@ -1,67 +1,184 @@
-import { Tabs } from "antd";
-import type { TabsProps } from "antd";
-import Categories from "./child/Categories";
+import { Button, Image, Modal, Space, Table, Tag, Tooltip, message, Tabs } from 'antd';
+import { memo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-const Product = () => {
-  const onChange = (key: string) => {
-    console.log("Active Tab:", key);
+import { useProduct } from '../product/service/useProducts';
+import ProductForm from '../product/components/ProductsForm';
+
+
+import type { TabsProps } from "antd";
+import Categories from './child/Categories';
+
+const Dashboard = () => {
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category") || "all";
+
+  const { getProducts, deleteProduct } = useProduct();
+  const { data: productRes, isLoading } = getProducts();
+
+  const [open, setOpen] = useState(false);
+
+  // backenddan keladigan productlar
+  console.log("Product Response:", productRes);
+  const allProducts = productRes?.data?.allProducts || [];
+
+  // filter qilingan productlar
+  const filteredProducts =
+    category === "all"
+      ? allProducts
+      : allProducts.filter((p: any) => p.category?.name === category);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProduct.mutateAsync({ id: String(id) }); // 🔥 shu yerda string qilib yuboramiz
+      message.success("Product deleted successfully");
+    } catch (err: any) {
+      console.error("Delete error:", err);
+      message.error(err?.response?.data?.message || "Failed to delete product");
+    }
   };
 
-  const productTable = (
-    <div className="bg-white mt-8 rounded-2xl p-6 shadow-sm">
-      <h2 className="text-lg font-semibold mb-4">All Products</h2>
-      <table className="w-full text-left text-sm">
-        <thead>
-          <tr className="text-gray-500 border-b border-[#EEEEEE]">
-            <th className="py-3">Title</th>
-            <th className="py-3">Description</th>
-            <th className="py-3">Price (USD)</th>
-            <th className="py-3">Category ID</th>
-            <th className="py-3">Stock</th>
-            <th className="py-3">Brand</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            {
-              title: "iPhone 14 Pro",
-              description: "Apple flagship smartphone",
-              price: 1199,
-              categoryId: 1,
-              stock: 50,
-              brand: "Apple",
-            },
-            {
-              title: "Samsung Galaxy S23",
-              description: "High-end Android smartphone",
-              price: 999,
-              categoryId: 1,
-              stock: 75,
-              brand: "Samsung",
-            },
-          ].map((product, idx) => (
-            <tr
-              key={idx}
-              className="border-b last:border-none border-[#EEEEEE]"
-            >
-              <td className="py-3">{product.title}</td>
-              <td className="max-w-[200px] truncate">{product.description}</td>
-              <td>${product.price}</td>
-              <td>{product.categoryId}</td>
-              <td>{product.stock}</td>
-              <td>{product.brand}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+
+  const columns = [
+    {
+      title: "Image",
+      dataIndex: "images",
+      key: "images",
+      width: 100,
+      render: (images: any[]) => (
+        <div className="flex justify-center items-center">
+          {images?.length ? (
+            <Image
+              src={`https://api.errorchi.uz/product/image/${images[0]}`}
+              alt="product"
+              className="w-12 h-12 rounded-lg border object-contain border-gray-300 shadow-sm"
+              fallback="https://placehold.co/100x100?text=No+Image"
+            />
+          ) : (
+            <span>No image</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Product Name",
+      dataIndex: "title",
+      key: "title",
+      width: 220,
+      render: (_: any, record: any) => (
+        <Tooltip
+          title={
+            <>
+              <div><b>Created by:</b> {record?.user?.fname || "Unknown"}</div>
+              <div><b>Email:</b> {record?.user?.email || "no email"}</div>
+            </>
+          }
+        >
+          <span className="font-semibold text-gray-800 cursor-pointer">
+            {record.title}
+          </span>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Category",
+      dataIndex: ["category", "name"],
+      key: "category",
+      width: 160,
+      render: (category: string) => (
+        <Tag
+          className="px-3 py-1 rounded-full text-sm"
+          color={
+            category === "Shoes"
+              ? "blue"
+              : category === "Electronics"
+                ? "purple"
+                : "geekblue"
+          }
+        >
+          {category}
+        </Tag>
+      ),
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: 150,
+      render: (price: number) => (
+        <span className="text-green-600 font-medium">{price.toLocaleString()} USD</span>
+      ),
+    },
+    {
+      title: "Stock",
+      dataIndex: "stock",
+      key: "stock",
+      width: 100,
+    },
+    {
+      title: "Brand",
+      dataIndex: "brand",
+      key: "brand",
+      width: 150,
+      render: (brand: string) => brand || "-",
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: 180,
+      render: (_: any, record: any) => (
+        <Space>
+          <Button
+            type="link"
+            danger
+            className="hover:text-red-700"
+            onClick={() => handleDelete(record.id)}
+          >
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
+  ];
 
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Products",
-      children: productTable,
+      children: (
+        <>
+
+          <div className="flex justify-between items-center mb-3 p-[5px]">
+            <h2 className="text-xl font-bold">Products</h2>
+            <Button className="mb-[12px]" type="primary" onClick={() => setOpen(true)}>
+              Add
+            </Button>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl shadow-md">
+            <Modal open={open} footer={null} onCancel={() => setOpen(false)}>
+              <ProductForm setOpen={setOpen} />
+            </Modal>
+
+            <Table
+              columns={columns}
+              dataSource={filteredProducts}
+              rowKey="id"
+              bordered
+              tableLayout="fixed"
+              pagination={{ pageSize: 5 }}
+              loading={isLoading}
+              rowClassName={(_, index) =>
+                index % 2 === 0
+                  ? "bg-white hover:bg-gray-50 transition-colors"
+                  : "bg-gray-50 hover:bg-gray-100 transition-colors"
+              }
+            />
+          </div>
+
+
+        </>
+      ),
     },
     {
       key: "2",
@@ -70,20 +187,23 @@ const Product = () => {
     },
   ];
 
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">Hello Evano</h1>
-        <input
-          type="text"
-          placeholder="Search"
-          className="border border-gray-300 rounded-lg px-3 py-1 text-sm outline-none"
-        />
-      </div>
 
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-    </div>
+  return (
+    <>
+
+
+      <Modal open={open} footer={null} onCancel={() => setOpen(false)}>
+        <h2>Products</h2>
+        <Button className="mb-[12px]" type="primary" onClick={() => setOpen(true)}>
+          Add Product
+        </Button>
+        <ProductForm setOpen={setOpen} />
+      </Modal>
+
+      <Tabs items={items} />
+
+    </>
   );
 };
 
-export default Product;
+export default memo(Dashboard);

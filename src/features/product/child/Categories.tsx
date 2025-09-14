@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import { Button, Form, Input, Modal, Space, Table } from "antd";
-import { useCategory } from "../store/useCategory";
+import { useCategory } from "../service/useCategory";
 
 const Categories = () => {
     const { getCategorys, createCategory, editCategory, deleteCategory } = useCategory();

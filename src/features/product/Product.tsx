@@ -73,7 +73,7 @@ const Product = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">Hello Evano</h1>
+        <h1 className="text-xl font-semibold">Hello </h1>
         <input
           type="text"
           placeholder="Search"

@@ -1,10 +1,9 @@
-import { Button, Image, Modal, Space, Table, Tag, Tooltip, message, Tabs } from 'antd';
+import { Button, Image, Modal, Space, Table, Tag, Tooltip, Tabs } from 'antd';
 import { memo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useProduct } from '../product/service/useProducts';
 import ProductForm from '../product/components/ProductsForm';
-
 
 import type { TabsProps } from "antd";
 import Categories from './child/Categories';
@@ -18,11 +17,9 @@ const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
 
-  // backenddan keladigan productlar
   console.log("Product Response:", productRes);
   const allProducts = productRes?.data?.allProducts || [];
 
-  // filter qilingan productlar
   const filteredProducts =
     category === "all"
       ? allProducts
@@ -30,14 +27,11 @@ const Dashboard = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteProduct.mutateAsync({ id: String(id) }); // 🔥 shu yerda string qilib yuboramiz
-      message.success("Product deleted successfully");
+      await deleteProduct.mutateAsync({ id: String(id) });
     } catch (err: any) {
       console.error("Delete error:", err);
-      message.error(err?.response?.data?.message || "Failed to delete product");
     }
   };
-
 
   const columns = [
     {
@@ -147,7 +141,6 @@ const Dashboard = () => {
       label: "Products",
       children: (
         <>
-
           <div className="flex justify-between items-center mb-3 p-[5px]">
             <h2 className="text-xl font-bold">Products</h2>
             <Button className="mb-[12px]" type="primary" onClick={() => setOpen(true)}>
@@ -175,8 +168,6 @@ const Dashboard = () => {
               }
             />
           </div>
-
-
         </>
       ),
     },
@@ -187,11 +178,8 @@ const Dashboard = () => {
     },
   ];
 
-
   return (
     <>
-
-
       <Modal open={open} footer={null} onCancel={() => setOpen(false)}>
         <h2>Products</h2>
         <Button className="mb-[12px]" type="primary" onClick={() => setOpen(true)}>
@@ -201,7 +189,6 @@ const Dashboard = () => {
       </Modal>
 
       <Tabs items={items} />
-
     </>
   );
 };

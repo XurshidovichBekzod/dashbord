@@ -3,7 +3,7 @@ import type { FormProps } from "antd";
 import { Alert, Button, Form, Input } from "antd";
 import { useAuth } from "../service/useAuth";
 import { useDispatch } from "react-redux";
-import { setToken } from "../store/authSlice";
+import { setToken, removeUser } from "../store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 type FieldType = {
@@ -13,32 +13,26 @@ type FieldType = {
 
 const Login = () => {
   const { signIn } = useAuth();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     signIn.mutate(values, {
       onSuccess: (res) => {
-        const token = res.data.data.accessToken;
-        const user = res.data.data.user;
-
-        dispatch(setToken(token));
-
-        if (user.role === "user") {
-          // userni verify sahifasiga yuboramiz
+        dispatch(setToken(res.data.accessToken))
+        if (res.data.user.role === "user") {
           open(
-            `https://ecommerce-ashy-theta-26.vercel.app/api/verify?q=${btoa(
-              JSON.stringify(values)
-            )}`
+            `https://next-project-2-part.vercel.app/verify?q=${btoa(JSON.stringify(values))}`
           );
         } else {
           navigate("/");
         }
-      },
-    });
+        dispatch(removeUser());
+      }
+    })
   };
 
-  const message = signIn.error?.response?.data?.message;
+  const message = signIn.error?.response?.data?.message
 
   const errorMessage =
     typeof message === "string"
@@ -70,19 +64,18 @@ const Login = () => {
           >
             <Input.Password />
           </Form.Item>
-
           {signIn.isError && (
             <div className="mb-6">
               <Alert message={errorMessage} type="error" />
             </div>
           )}
-
           <Form.Item label={null}>
             <Button loading={signIn.isPending} type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
           <Link to={"/register"}>Register</Link>
+
         </Form>
       </div>
     </div>

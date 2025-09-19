@@ -22,7 +22,7 @@ const Login = () => {
         dispatch(setToken(res.data.accessToken))
         if (res.data.user.role === "user") {
           open(
-            `https://next-project-2-part.vercel.app/verify?q=${btoa(JSON.stringify(values))}`
+            `https://ecommerce-ashy-theta-26.vercel.app/verify?q=${btoa(JSON.stringify(values))}`
           );
         } else {
           navigate("/");

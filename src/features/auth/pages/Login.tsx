@@ -3,7 +3,7 @@ import type { FormProps } from "antd";
 import { Alert, Button, Form, Input } from "antd";
 import { useAuth } from "../service/useAuth";
 import { useDispatch } from "react-redux";
-import { setToken, removeUser } from "../store/authSlice";
+import { setToken } from "../store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 type FieldType = {
@@ -13,31 +13,36 @@ type FieldType = {
 
 const Login = () => {
   const { signIn } = useAuth();
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     signIn.mutate(values, {
       onSuccess: (res) => {
-        dispatch(setToken(res.data.accessToken))
+        dispatch(setToken(res.data.accessToken));
+
         if (res.data.user.role === "user") {
-          open(
-            `https://ecommerce-ashy-theta-26.vercel.app/verify?q=${btoa(JSON.stringify(values))}`
+          window.open(
+            `https://ecommerce-ashy-theta-26.vercel.app/verify?q=${btoa(
+              JSON.stringify(values)
+            )}`,
+            "_blank"
           );
         } else {
           navigate("/");
         }
-        dispatch(removeUser());
-      }
-    })
+      },
+    });
   };
 
-  const message = signIn.error?.response?.data?.message
+  const message = signIn.error?.response?.data?.message;
 
   const errorMessage =
-    typeof message === "string"
-      ? message
-      : message?.map((i: string, inx: number) => <p key={inx}>{i}</p>);
+    typeof message === "string" ? (
+      message
+    ) : (
+      message?.map((i: string, idx: number) => <p key={idx}>{i}</p>)
+    );
 
   return (
     <div className="bg-slate-100 h-screen grid place-items-center">
@@ -64,18 +69,27 @@ const Login = () => {
           >
             <Input.Password />
           </Form.Item>
+
           {signIn.isError && (
             <div className="mb-6">
               <Alert message={errorMessage} type="error" />
             </div>
           )}
-          <Form.Item label={null}>
-            <Button loading={signIn.isPending} type="primary" htmlType="submit">
+
+          <Form.Item>
+            <Button
+              loading={signIn.isPending}
+              type="primary"
+              htmlType="submit"
+              block
+            >
               Submit
             </Button>
           </Form.Item>
-          <Link to={"/register"}>Register</Link>
 
+          <div className="text-sm">
+            Don’t have an account? <Link to="/register">Register</Link>
+          </div>
         </Form>
       </div>
     </div>
